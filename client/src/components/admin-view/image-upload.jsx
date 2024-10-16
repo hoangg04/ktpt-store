@@ -83,7 +83,7 @@ function ProductImageUpload({
           className="hidden"
           ref={inputRef}
           onChange={handleImageFileChange}
-          disabled={isEditMode}
+          disabled={!isEditMode}
         />
         {!imageFile ? (
           <Label

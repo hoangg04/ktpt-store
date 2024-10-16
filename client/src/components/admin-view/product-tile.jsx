@@ -38,6 +38,7 @@ function AdminProductTile({
             onClick={() => {
               setOpenCreateProductsDialog(true);
               setCurrentEditedId(product?._id);
+              console.log("product",product)
               setFormData(product);
             }}
           >

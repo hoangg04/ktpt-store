@@ -1,11 +1,13 @@
 const express = require("express");
+require("dotenv").config();
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
 const adminOrderRouter = require("./routes/admin/order-routes");
-
+const morgan = require("morgan");
+const { default: helmet } = require("helmet");
 const shopProductsRouter = require("./routes/shop/products-routes");
 const shopCartRouter = require("./routes/shop/cart-routes");
 const shopAddressRouter = require("./routes/shop/address-routes");
@@ -17,9 +19,9 @@ const commonFeatureRouter = require("./routes/common/feature-routes");
 
 //create a database connection -> u can also
 //create a separate file for this and then import/use that file here
-
+mongoose.set("debug", true);
 mongoose
-  .connect("db_url")
+  .connect("mongodb://localhost:27018/ktpt")
   .then(() => console.log("MongoDB connected"))
   .catch((error) => console.log(error));
 
@@ -40,7 +42,8 @@ app.use(
     credentials: true,
   })
 );
-
+app.use(morgan("dev"));
+app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRouter);

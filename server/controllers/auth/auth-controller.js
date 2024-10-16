@@ -38,7 +38,6 @@ const registerUser = async (req, res) => {
 //login
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const checkUser = await User.findOne({ email });
     if (!checkUser)
@@ -64,7 +63,7 @@ const loginUser = async (req, res) => {
         email: checkUser.email,
         userName: checkUser.userName,
       },
-      "CLIENT_SECRET_KEY",
+      process.env.JWT_KEY,
       { expiresIn: "60m" }
     );
 
@@ -106,9 +105,17 @@ const authMiddleware = async (req, res, next) => {
     });
 
   try {
-    const decoded = jwt.verify(token, "CLIENT_SECRET_KEY");
-    req.user = decoded;
-    next();
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    if (decoded) {
+      const holdUser = await User.findOne({ _id: decoded.id }).lean()
+      if (!holdUser)
+        throw new Error("User not found");
+      req.user = {
+        ...decoded,
+        role: holdUser.role,
+      };
+      next();
+    }
   } catch (error) {
     res.status(401).json({
       success: false,

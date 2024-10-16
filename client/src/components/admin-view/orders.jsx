@@ -58,8 +58,8 @@ function AdminOrdersView() {
           </TableHeader>
           <TableBody>
             {orderList && orderList.length > 0
-              ? orderList.map((orderItem) => (
-                  <TableRow>
+              ? orderList.map((orderItem,index) => (
+                  <TableRow key={index}>
                     <TableCell>{orderItem?._id}</TableCell>
                     <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
                     <TableCell>
