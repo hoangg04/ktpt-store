@@ -48,7 +48,6 @@ function AdminProducts() {
 						formData: { ...formData, image: uploadedImageUrl },
 					}),
 			  ).then((data) => {
-					console.log(data, "edit");
 
 					if (data?.payload?.success) {
 						dispatch(fetchAllProducts());
@@ -70,6 +69,7 @@ function AdminProducts() {
 						setFormData(initialFormData);
 						toast({
 							title: "Product add successfully",
+							variation: "success"
 						});
 					}
 			  });
@@ -93,7 +93,6 @@ function AdminProducts() {
 		dispatch(fetchAllProducts());
 	}, [dispatch]);
 
-	console.log(formData, "productList");
 	return (
 		<Fragment>
 			<div className="mb-5 w-full flex justify-end">

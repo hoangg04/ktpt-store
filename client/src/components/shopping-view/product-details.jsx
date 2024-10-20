@@ -24,8 +24,6 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 	const { toast } = useToast();
 
 	function handleRatingChange(getRating) {
-		console.log(getRating, "getRating");
-
 		setRating(getRating);
 	}
 
@@ -87,6 +85,12 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 				dispatch(getReviews(productDetails?._id));
 				toast({
 					title: "Review added successfully!",
+					variant: "success",
+				});
+			} else {
+				toast({
+					title: data.payload.message,
+					variant: "destructive",
 				});
 			}
 		});
@@ -96,7 +100,6 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 		if (productDetails !== null) dispatch(getReviews(productDetails?._id));
 	}, [productDetails]);
 
-	console.log(reviews, "reviews");
 
 	const averageReview =
 		reviews && reviews.length > 0
@@ -120,6 +123,11 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 						<h1 className="text-3xl font-extrabold">{productDetails?.title}</h1>
 						<p className="text-muted-foreground text-2xl mb-5 mt-4">
 							{productDetails?.description}
+						</p>
+					</div>
+					<div>
+						<p className="text-muted-foreground text-2xl mb-5 mt-4">
+							Stock: {productDetails?.totalStock}
 						</p>
 					</div>
 					<div className="flex items-center justify-between">

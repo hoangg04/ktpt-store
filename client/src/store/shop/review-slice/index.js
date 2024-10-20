@@ -9,12 +9,15 @@ const initialState = {
 export const addReview = createAsyncThunk(
   "/order/addReview",
   async (formdata) => {
-    const response = await axios.post(
-      `http://localhost:5000/api/shop/review/add`,
-      formdata
-    );
-
-    return response.data;
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/shop/review/add`,
+        formdata
+      );
+      return response.data;
+    } catch (err) {
+      return err.response.data
+    }
   }
 );
 
