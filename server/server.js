@@ -14,14 +14,14 @@ const shopAddressRouter = require("./routes/shop/address-routes");
 const shopOrderRouter = require("./routes/shop/order-routes");
 const shopSearchRouter = require("./routes/shop/search-routes");
 const shopReviewRouter = require("./routes/shop/review-routes");
-
+const { seedDatabase } = require("./helpers/initData");
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
 //create a database connection -> u can also
 //create a separate file for this and then import/use that file here
 mongoose.set("debug", true);
 mongoose
-  .connect("mongodb://localhost:27018/ktpt")
+  .connect("mongodb://localhost:27017/ktpt")
   .then(() => console.log("MongoDB connected"))
   .catch((error) => console.log(error));
 
@@ -49,14 +49,14 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/admin/orders", adminOrderRouter);
-
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);
 app.use("/api/shop/address", shopAddressRouter);
 app.use("/api/shop/order", shopOrderRouter);
 app.use("/api/shop/search", shopSearchRouter);
 app.use("/api/shop/review", shopReviewRouter);
-
 app.use("/api/common/feature", commonFeatureRouter);
+seedDatabase();
+
 
 app.listen(PORT, () => console.log(`Server is now running on port ${PORT}`));
