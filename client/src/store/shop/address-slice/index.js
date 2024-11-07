@@ -9,46 +9,62 @@ const initialState = {
 export const addNewAddress = createAsyncThunk(
   "/addresses/addNewAddress",
   async (formData) => {
-    const response = await axios.post(
-      "http://localhost:5000/api/shop/address/add",
-      formData
-    );
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/shop/address/add",
+        formData
+      );
 
-    return response.data;
+      return response.data;
+    } catch (err) {
+      return err.response.data;
+    }
   }
 );
 
 export const fetchAllAddresses = createAsyncThunk(
   "/addresses/fetchAllAddresses",
   async (userId) => {
-    const response = await axios.get(
-      `http://localhost:5000/api/shop/address/get/${userId}`
-    );
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/shop/address/get/${userId}`
+      );
 
-    return response.data;
+      return response.data;
+    } catch (err) {
+      return err.response.data;
+    }
   }
 );
 
 export const editaAddress = createAsyncThunk(
   "/addresses/editaAddress",
   async ({ userId, addressId, formData }) => {
-    const response = await axios.put(
-      `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
-      formData
-    );
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
+        formData
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
   }
 );
 
 export const deleteAddress = createAsyncThunk(
   "/addresses/deleteAddress",
   async ({ userId, addressId }) => {
-    const response = await axios.delete(
-      `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
-    );
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
   }
 );
 

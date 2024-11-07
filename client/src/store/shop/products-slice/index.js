@@ -16,23 +16,31 @@ export const fetchAllFilteredProducts = createAsyncThunk(
       sortBy: sortParams,
     });
 
-    const result = await axios.get(
-      `http://localhost:5000/api/shop/products/get?${query}`
-    );
+    try {
+      const result = await axios.get(
+        `http://localhost:5000/api/shop/products/get?${query}`
+      );
 
 
-    return result?.data;
+      return result?.data;
+    } catch (err) {
+      return err.response.data;
+    }
   }
 );
 
 export const fetchProductDetails = createAsyncThunk(
   "/products/fetchProductDetails",
   async (id) => {
-    const result = await axios.get(
-      `http://localhost:5000/api/shop/products/get/${id}`
-    );
+    try {
+      const result = await axios.get(
+        `http://localhost:5000/api/shop/products/get/${id}`
+      );
 
-    return result?.data;
+      return result?.data;
+    } catch (err) {
+      return err.response.data;
+    }
   }
 );
 

@@ -76,7 +76,7 @@ function ShoppingCheckout() {
 				navigate(`/shop/account`);
 			} else {
 				toast({
-					title: "Something went wrong. Please try again later.",
+					title: data.payload.message,
 					variant: "destructive",
 				});
 			}

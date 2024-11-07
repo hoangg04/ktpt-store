@@ -24,7 +24,7 @@ mongoose
   .connect("mongodb://localhost:27017/ktpt")
   .then(() => console.log("MongoDB connected"))
   .catch((error) => console.log(error));
-
+require("./helpers/init.redis");
 const app = express();
 const PORT = process.env.PORT || 5000;
 

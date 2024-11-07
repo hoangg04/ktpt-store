@@ -22,11 +22,16 @@ export const addReview = createAsyncThunk(
 );
 
 export const getReviews = createAsyncThunk("/order/getReviews", async (id) => {
-  const response = await axios.get(
-    `http://localhost:5000/api/shop/review/${id}`
-  );
 
-  return response.data;
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/shop/review/${id}`
+    );
+
+    return response.data;
+  } catch (err) {
+    return err.response.data
+  }
 });
 
 const reviewSlice = createSlice({

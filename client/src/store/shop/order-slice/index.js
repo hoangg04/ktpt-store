@@ -12,50 +12,74 @@ const initialState = {
 export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
-    const response = await axios.post(
-      "http://localhost:5000/api/shop/order/create",
-      orderData
-    );
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/shop/order/create",
+        orderData,{
+          withCredentials: true,
+        }
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
   }
 );
 
 export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
   async ({ paymentId, payerId, orderId }) => {
-    const response = await axios.post(
-      "http://localhost:5000/api/shop/order/capture",
-      {
-        paymentId,
-        payerId,
-        orderId,
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/shop/order/capture",
+        {
+          paymentId,
+          payerId,
+          orderId,
+        }, {
+        withCredentials: true,
       }
-    );
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
   }
 );
 
 export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUserId",
   async (userId) => {
-    const response = await axios.get(
-      `http://localhost:5000/api/shop/order/list/${userId}`
-    );
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/shop/order/list/${userId}`, {
+        withCredentials: true,
+      }
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
   }
 );
 
 export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
-    const response = await axios.get(
-      `http://localhost:5000/api/shop/order/details/${id}`
-    );
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/shop/order/details/${id}`, {
+        withCredentials: true,
+      }
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
   }
 );
 

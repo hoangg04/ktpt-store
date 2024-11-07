@@ -6,7 +6,7 @@ async function generateUsers(num) {
 	const users = [];
 	const iterable = [0, ...Array(num - 1).fill(1)];
 	let index = 0;
-	for await (let i of iterable) {
+	for (let i of iterable) {
 		const user = {
 			userName: "user" + Math.random().toString(36).substring(7),
 			email: `${i === 0 ? "admin" : `test${index++}`}@dev.com`,

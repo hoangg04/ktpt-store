@@ -1,6 +1,7 @@
 const Order = require("../../models/Order");
 const Cart = require("../../models/Cart");
 const Product = require("../../models/Product");
+const Address = require("../../models/Address");
 
 const createOrder = async (req, res) => {
   const {
@@ -16,8 +17,35 @@ const createOrder = async (req, res) => {
     cartId,
   } = req.body;
   try {
-
-    const newlyCreatedOrder = Order.create({
+    const cart = await Cart.findOne({ userId });
+    const holderAddress = await Address.findOne({
+      userId,
+      _id: addressInfo?.addressId,
+    })
+    if (!holderAddress) {
+      return res.status(400).json({
+        success: false,
+        message: "Something went wrong",
+      });
+    }
+    if (!cart || cart.items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Cart is empty",
+      });
+    }
+    // check item in cart and product in database
+    console.log(cart.items)
+    const isCartItemsValid = cart.items.every((item) => {
+      return cartItems.some((cartItem) => cartItem.productId === item.productId?.toString());
+    });
+    if (!isCartItemsValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Cart items are not valid",
+      })
+    }
+    const newlyCreatedOrder = await Order.create({
       userId,
       cartId,
       cartItems,
