@@ -1,9 +1,13 @@
+const { isValidObjectId } = require("mongoose");
 const Cart = require("../../models/Cart");
 const Product = require("../../models/Product");
 
 const addToCart = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
+    // dau tien la userId, productId, quantity tu yeu cua nguoi dung
+    // kiem tra xem co du lieu khong
+
 
     if (!userId || !productId || quantity <= 0) {
       return res.status(400).json({
@@ -11,18 +15,30 @@ const addToCart = async (req, res) => {
         message: "Invalid data provided!",
       });
     }
+    // check userId and productId is instanceof ObjectId
+    if(isValidObjectId(userId) === false || isValidObjectId(productId) === false){
+      return res.status(400).json({
+        success: false,
+        message: "UserId or ProductId is invalid",
+      });
+    }
+
+
+    // khi ma nhung cai du lieu em truyen vao hop le 
+    // thi em se tim san pham theo id duoc yeu cau
 
     const product = await Product.findById(productId);
-
+// kiem tra xem co san pham khong
     if (!product) {
       return res.status(404).json({
         success: false,
         message: "Product not found",
       });
     }
-
+    // san pham khong co thi tra ve cho nguoi dung la product not found
+    // khi san pham thay thi em tim xem User co gio hang chua
     let cart = await Cart.findOne({ userId });
-
+    // neu khong co gio hang thi em se tao moi
     if (!cart) {
       cart = new Cart({ userId, items: [] });
     }
@@ -30,19 +46,26 @@ const addToCart = async (req, res) => {
     const findCurrentProductIndex = cart.items.findIndex(
       (item) => item.productId.toString() === productId
     );
+    // Cho nay la em kiem tra xem san pham da co trong gio hang chua
+    
+    // neu co roi thi em se tang so luong len
 
     if (findCurrentProductIndex === -1) {
+      //Khi findCurrentProductIndex = -1 thi san pham chua co trong gio hang
       cart.items.push({ productId, quantity });
     } else {
+      // khi findCurrentProductIndex khac -1 thi san pham da co trong gio hang
       cart.items[findCurrentProductIndex].quantity += quantity;
     }
-
+    // em se luu lai gio hang sau khi themn san pham
     await cart.save();
-    res.status(200).json({
+    // va em se tra ve cho nguoi dung la gio hang sau khi them san pham
+    return res.status(200).json({
       success: true,
       data: cart,
     });
   } catch (error) {
+    // O day neu trong qua trinh tim kiem san pham hoac them san pham no se tra ve loi Error cho nguoi dung
     console.log(error);
     res.status(500).json({
       success: false,

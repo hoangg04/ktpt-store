@@ -38,14 +38,36 @@ const registerUser = async (req, res) => {
 //login
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  // email khac rong khong
+  // password khac rong khong
+  if (!password || password == "") {
+    return res.json({
+      success: false,
+      message: "Password is required",
+    });
+  }
+  if (!email || email == "") {
+    return res.json({
+      success: false,
+      message: "Email is required",
+    })
+  }
+  if(email.indexOf("@") == -1 || email.indexOf(".") == -1){
+    return res.json({
+      success: false,
+      message: "Email is invalid",
+    })
+  }
   try {
+    // Khi email dung dinh dang
     const checkUser = await User.findOne({ email });
+    // Check khi ko co email trong database
     if (!checkUser)
       return res.json({
         success: false,
         message: "User doesn't exists! Please register first",
       });
-
+    // Khi no co email thi password
     const checkPasswordMatch = await bcrypt.compare(
       password,
       checkUser.password
