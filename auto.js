@@ -1,4 +1,3 @@
-var fs = require('fs');
 
 
 const login = async (body) => {
@@ -23,7 +22,7 @@ const addToCart = async ({ body, cookie }) => {
 		"method": "POST"
 	});
 }
-const addAddress = async ({ body, cookie }) => {
+const addAddress = async ({ body, cookie, result, user }) => {
 	const res = await fetch("http://localhost:5000/api/shop/address/add", {
 		"headers": {
 			"content-type": "application/json",
@@ -32,30 +31,82 @@ const addAddress = async ({ body, cookie }) => {
 		"body": JSON.stringify(body),
 		"method": "POST"
 	});
+	const data = await res.json();
+	result.push(`${user},${data.data._id}`)
 }
+const fs = require('fs/promises');
+
 (async () => {
-	const race = []
+	const race = [];
+	const BATCH_SIZE = 20; // Batch size for handling requests concurrently
+
+	// Simulate user login
 	for (let i = 0; i < 99; i++) {
-		race.push(login({
-			"email": `test${i}@dev.com`, password: "anhanh"
-		}))
-	};
-	const users = await Promise.all(race)
-	const raceCart = []
-	const raceAddress = []
-	if (users.length > 0) {
-		for (let i of users) {
-			let user = i.split(",")
-			raceCart.push(addToCart({ body: { userId: user[0], "productId": "6714f1d1b1269137d1f768bb", "quantity": 1 }, cookie: `token=${user[1]}` }))
-			raceAddress.push(addAddress({ body: { userId: user[0], address: "abc", city: "abc", phone: "abc", pincode: "abc", notes: "abc" }, cookie: `token=${user[1]}` }))
-		}
-		await Promise.all([...raceCart, ...raceAddress])
+		race.push(
+			login({ email: `test${i}@dev.com`, password: "anhanh" })
+				.catch(err => {
+					console.error(`Login failed for test${i}@dev.com:`, err);
+					return null;
+				})
+		);
 	}
-	fs.writeFile('users.csv', users.join("\n"), 'utf8', function (err) {
-		if (err) {
-			console.log('Some error occured - file either not saved or corrupted file saved.');
-		} else {
-			console.log('It\'s saved!');
+	const processInBatches = async (tasks, batchSize) => {
+		const users = []
+		for (let i = 0; i < tasks.length; i += batchSize) {
+			users.push(...await Promise.all(tasks.slice(i, i + batchSize)))
 		}
-	});
-})()
+		return users;
+	};
+	const users = await processInBatches(race, BATCH_SIZE)
+	if (users.length === 0) {
+		console.log("No users logged in successfully.");
+		return;
+	}
+	console.log(users.length, "users logged in successfully.");
+	if (users.length < 99) {
+		console.log("Not all users logged in successfully.");
+	}
+	const result = [];
+	const raceCart = [];
+	const raceAddress = [];
+
+	for (const userData of users) {
+		const [userId, token] = userData.split(",");
+		raceCart.push(
+			addToCart({
+				body: { userId, productId: "673724f150946a1adb0227be", quantity: 1 },
+				cookie: `token=${token}`
+			}).catch(err => console.error(`Failed to add to cart for user ${userId}:`, err))
+		);
+
+		raceAddress.push(
+			addAddress({
+				body: {
+					userId,
+					address: "abc",
+					city: "abc",
+					phone: "abc",
+					pincode: "abc",
+					notes: "abc"
+				},
+				cookie: `token=${token}`,
+				result,
+				user: userData,
+			}).catch(err => console.error(`Failed to add address for user ${userId}:`, err))
+		);
+	}
+
+	// Process in batches
+
+
+	await processInBatches(raceCart, BATCH_SIZE);
+	await processInBatches(raceAddress, BATCH_SIZE);
+
+	// Write to CSV
+	try {
+		await fs.writeFile('users.csv', result.join("\n"), 'utf8');
+		console.log("Users data saved to users.csv!");
+	} catch (err) {
+		console.error("Error saving users data to file:", err);
+	}
+})();

@@ -24,7 +24,7 @@ mongoose
   .connect("mongodb://localhost:27017/ktpt")
   .then(() => console.log("MongoDB connected"))
   .catch((error) => console.log(error));
-require("./helpers/init.redis");
+// require("./helpers/init.redis");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -46,6 +46,10 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
+app.get("/", (req, res) => {
+  console.log("TIME:::" , Date.now());
+  res.send("Hello World");
+});
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/admin/orders", adminOrderRouter);

@@ -2,25 +2,24 @@ const Order = require("../../models/Order");
 const Cart = require("../../models/Cart");
 const Product = require("../../models/Product");
 const Address = require("../../models/Address");
-
+const RedisService = require("../../services/redis.service");
+const redisClient = new RedisService();
 const createOrder = async (req, res) => {
   const {
     userId,
     cartItems,
-    addressInfo,
+    addressId,
     orderStatus,
     paymentMethod,
     paymentStatus,
     totalAmount,
     orderDate,
-    orderUpdateDate,
-    cartId,
   } = req.body;
   try {
     const cart = await Cart.findOne({ userId });
     const holderAddress = await Address.findOne({
       userId,
-      _id: addressInfo?.addressId,
+      _id: addressId,
     })
     if (!holderAddress) {
       return res.status(400).json({
@@ -35,7 +34,6 @@ const createOrder = async (req, res) => {
       });
     }
     // check item in cart and product in database
-    console.log(cart.items)
     const isCartItemsValid = cart.items.every((item) => {
       return cartItems.some((cartItem) => cartItem.productId === item.productId?.toString());
     });
@@ -45,17 +43,43 @@ const createOrder = async (req, res) => {
         message: "Cart items are not valid",
       })
     }
+
+    // use primitive lock here to prevent
+    // multiple order creation at the same time
+    const checkProducts = []
+    for (let item of cart.items) {
+      const { productId, quantity } = item;
+      const product = await Product.findById(productId);
+      redisClient.set("stock" + productId, product.totalStock);
+      if (!product) {
+        return res.status(400).json({
+          success: false,
+          message: "Product not found",
+        });
+      }
+      const key = await redisClient.acquireLock({ productId, quantity });
+      if (key) {
+        await redisClient.releaseKey(key);
+      }
+      checkProducts.push(key ? true : false);
+    }
+    console.log("checkProducts", userId, checkProducts)
+    if (checkProducts.includes(false)) {
+      return res.status(400).json({
+        success: false,
+        message: "Some products are changed, please review again",
+      });
+    }
+
     const newlyCreatedOrder = await Order.create({
       userId,
-      cartId,
       cartItems,
-      addressInfo,
+      addressId,
       orderStatus,
       paymentMethod,
       paymentStatus,
       totalAmount,
       orderDate,
-      orderUpdateDate,
     });
     if (!newlyCreatedOrder) {
       throw new Error("Order not created");

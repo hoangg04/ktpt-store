@@ -28,6 +28,12 @@ const addToCart = async (req, res) => {
     // thi em se tim san pham theo id duoc yeu cau
 
     const product = await Product.findById(productId);
+    if(product.totalStock < quantity){
+      return res.status(400).json({
+        success: false,
+        message: "Product out of stock",
+      });
+    }
 // kiem tra xem co san pham khong
     if (!product) {
       return res.status(404).json({

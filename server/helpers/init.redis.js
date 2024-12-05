@@ -61,12 +61,11 @@ class InitRedis {
 	}
 	async connect() {
 		if (!this.client) {
-			const host =
-				process.env.NODE_ENV !== "dev" ? process.env.LOCALHOST_PRO : process.env.LOCALHOST_DEV;
 			const options = {
 				socket: {
-					host,
+					host:"localhost",
 					port: "6379",
+					password: "anhanh",
 				},
 			};
 			if (process.env.NODE_ENV !== "dev") {

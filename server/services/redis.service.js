@@ -1,4 +1,5 @@
 const { getRedis } = require("../helpers/init.redis");
+const Product = require("../models/Product");
 
 class RedisService {
 	constructor() {
@@ -19,6 +20,7 @@ class RedisService {
 		return null;
 	}
 	async releaseKey(key) {
+		console.log("Release key", key);
 		await this.client.del(key);
 	}
 	async releaseManyKeys(keys) {
@@ -26,16 +28,26 @@ class RedisService {
 	}
 	async acquireLock({ productId, quantity }) {
 		const key = `lock_v2024_${productId}`;
-
 		const retryCount = 10;
 		const retryDelay = 50;
 		const expireTime = 3000;
 		for (let i = 0; i < retryCount; i++) {
+
 			const result = await this.setnx(key, quantity);
+			const totalStock = await this.client.get(`stock${productId}`);
+			if (quantity > +totalStock) {
+				return null;
+			}
+			console.log("result", result);
+
 			if (result) {
-				const { modifiedCount } = await reservationInventory({ productId, quantity });
+				const { modifiedCount } = await Product.updateOne({ _id: productId }, {
+					$inc: { totalStock: -quantity },
+				});
+				console.log("modifiedCount", modifiedCount);
 				if (modifiedCount) {
 					await this.client.pExpire(key, expireTime);
+					await this.client.set(`stock${productId}`, +totalStock - quantity);
 					return key;
 				}
 				return null;

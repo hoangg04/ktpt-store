@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema({
-  userId: String,
-  cartId: String,
+  userId: mongoose.Schema.Types.ObjectId,
   cartItems: [
     {
       productId: String,
@@ -12,20 +11,12 @@ const OrderSchema = new mongoose.Schema({
       quantity: Number,
     },
   ],
-  addressInfo: {
-    addressId: String,
-    address: String,
-    city: String,
-    pincode: String,
-    phone: String,
-    notes: String,
-  },
+  addressId: mongoose.Schema.Types.ObjectId,
   orderStatus: String,
   paymentMethod: String,
   paymentStatus: String,
   totalAmount: Number,
   orderDate: Date,
-  orderUpdateDate: Date,
 });
 
 module.exports = mongoose.model("Order", OrderSchema);
