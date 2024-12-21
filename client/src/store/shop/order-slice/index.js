@@ -14,7 +14,7 @@ export const createNewOrder = createAsyncThunk(
   async (orderData) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/shop/order/create",
+        "https://e50d-116-96-110-215.ngrok-free.app/api/shop/order/create",
         orderData,{
           withCredentials: true,
         }
@@ -32,7 +32,7 @@ export const capturePayment = createAsyncThunk(
   async ({ paymentId, payerId, orderId }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/shop/order/capture",
+        "https://e50d-116-96-110-215.ngrok-free.app/api/shop/order/capture",
         {
           paymentId,
           payerId,
@@ -54,7 +54,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
   async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/shop/order/list/${userId}`, {
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/order/list/${userId}`, {
         withCredentials: true,
       }
       );
@@ -71,7 +71,7 @@ export const getOrderDetails = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/shop/order/details/${id}`, {
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/order/details/${id}`, {
         withCredentials: true,
       }
       );

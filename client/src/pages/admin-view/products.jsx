@@ -54,6 +54,10 @@ function AdminProducts() {
 						setFormData(initialFormData);
 						setOpenCreateProductsDialog(false);
 						setCurrentEditedId(null);
+						toast({
+							title: "Update successfully",
+							variant: "success",
+						});
 					}
 			  })
 			: dispatch(
@@ -78,6 +82,10 @@ function AdminProducts() {
 		dispatch(deleteProduct(getCurrentProductId)).then((data) => {
 			if (data?.payload?.success) {
 				dispatch(fetchAllProducts());
+				toast({
+					title: "Delete successfully",
+					variant: "success",
+				});
 			}
 		});
 	}
@@ -138,7 +146,7 @@ function AdminProducts() {
 							onSubmit={onSubmit}
 							formData={formData}
 							setFormData={setFormData}
-							buttonText={currentEditedId !== null ? "Edit" : "Add"}
+							buttonText={currentEditedId !== null ? "Save Edit" : "Add"}
 							formControls={addProductFormElements}
 							isBtnDisabled={!isFormValid()}
 						/>

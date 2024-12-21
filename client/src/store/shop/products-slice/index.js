@@ -18,7 +18,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
 
     try {
       const result = await axios.get(
-        `http://localhost:5000/api/shop/products/get?${query}`
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/products/get?${query}`
       );
 
 
@@ -34,7 +34,7 @@ export const fetchProductDetails = createAsyncThunk(
   async (id) => {
     try {
       const result = await axios.get(
-        `http://localhost:5000/api/shop/products/get/${id}`
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/products/get/${id}`
       );
 
       return result?.data;

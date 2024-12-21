@@ -109,7 +109,6 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 	return (
 		<Dialog open={open} onOpenChange={handleDialogClose}>
 			<DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
-				<DialogTitle />
 				<div className="relative overflow-hidden rounded-lg">
 					<img
 						src={productDetails?.image}
@@ -191,7 +190,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 						<div className="mt-10 flex-col flex gap-2">
 							<Label>Write a review</Label>
 							<div className="flex gap-1">
-								<StarRatingComponent rating={rating} handleRatingChange={handleRatingChange} />
+								<StarRatingComponent className={"star-review"} rating={rating} handleRatingChange={handleRatingChange} />
 							</div>
 							<Input
 								name="reviewMsg"
@@ -199,7 +198,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 								onChange={(event) => setReviewMsg(event.target.value)}
 								placeholder="Write a review..."
 							/>
-							<Button onClick={handleAddReview} disabled={reviewMsg.trim() === ""}>
+							<Button className="btn-review" onClick={handleAddReview} disabled={reviewMsg.trim() === ""}>
 								Submit
 							</Button>
 						</div>

@@ -52,13 +52,13 @@ function CommonForm({
             }
             value={value}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full select-process">
               <SelectValue placeholder={getControlItem.label} />
             </SelectTrigger>
             <SelectContent>
               {getControlItem.options && getControlItem.options.length > 0
                 ? getControlItem.options.map((optionItem) => (
-                    <SelectItem key={optionItem.id} value={optionItem.id}>
+                    <SelectItem key={optionItem.id} value={optionItem.id} className={optionItem.label}>
                       {optionItem.label}
                     </SelectItem>
                   ))
@@ -118,7 +118,7 @@ function CommonForm({
           </div>
         ))}
       </div>
-      <Button name={buttonText} disabled={isBtnDisabled} type="submit" className="mt-2 w-full">
+      <Button name={buttonText} disabled={isBtnDisabled} type="submit" className="mt-2 w-full update">
         {buttonText || "Submit"}
       </Button>
     </form>

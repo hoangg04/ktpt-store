@@ -11,7 +11,7 @@ export const getSearchResults = createAsyncThunk(
   async (keyword) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/shop/search/${keyword}`
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/search/${keyword}`
       );
 
       return response.data;

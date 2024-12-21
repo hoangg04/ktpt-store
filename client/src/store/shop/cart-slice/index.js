@@ -11,7 +11,7 @@ export const addToCart = createAsyncThunk(
   async ({ userId, productId, quantity }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/shop/cart/add",
+        "https://e50d-116-96-110-215.ngrok-free.app/api/shop/cart/add",
         {
           userId,
           productId,
@@ -31,7 +31,7 @@ export const fetchCartItems = createAsyncThunk(
   async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/shop/cart/get/${userId}`
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/cart/get/${userId}`
       );
 
       return response.data;
@@ -46,7 +46,7 @@ export const deleteCartItem = createAsyncThunk(
   async ({ userId, productId }) => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/shop/cart/${userId}/${productId}`
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/cart/${userId}/${productId}`
       );
 
       return response.data;
@@ -61,7 +61,7 @@ export const updateCartQuantity = createAsyncThunk(
   async ({ userId, productId, quantity }) => {
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/shop/cart/update-cart",
+        "https://e50d-116-96-110-215.ngrok-free.app/api/shop/cart/update-cart",
         {
           userId,
           productId,

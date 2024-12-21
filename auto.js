@@ -1,7 +1,7 @@
 
 
 const login = async (body) => {
-	const res = await fetch("http://localhost:5000/api/auth/login", {
+	const res = await fetch("https://e50d-116-96-110-215.ngrok-free.app/api/auth/login", {
 		"headers": {
 			"content-type": "application/json",
 		},
@@ -13,7 +13,7 @@ const login = async (body) => {
 	return `${data.user.id},${res.headers.get("set-cookie").split(";")[0].split("=")[1]}`;
 };
 const addToCart = async ({ body, cookie }) => {
-	const res = await fetch("http://localhost:5000/api/shop/cart/add", {
+	const res = await fetch("https://e50d-116-96-110-215.ngrok-free.app/api/shop/cart/add", {
 		"headers": {
 			"content-type": "application/json",
 			cookie,
@@ -23,7 +23,7 @@ const addToCart = async ({ body, cookie }) => {
 	});
 }
 const addAddress = async ({ body, cookie, result, user }) => {
-	const res = await fetch("http://localhost:5000/api/shop/address/add", {
+	const res = await fetch("https://e50d-116-96-110-215.ngrok-free.app/api/shop/address/add", {
 		"headers": {
 			"content-type": "application/json",
 			cookie,

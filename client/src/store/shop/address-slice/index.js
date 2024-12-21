@@ -11,7 +11,7 @@ export const addNewAddress = createAsyncThunk(
   async (formData) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/shop/address/add",
+        "https://e50d-116-96-110-215.ngrok-free.app/api/shop/address/add",
         formData
       );
 
@@ -27,7 +27,7 @@ export const fetchAllAddresses = createAsyncThunk(
   async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/shop/address/get/${userId}`
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/address/get/${userId}`
       );
 
       return response.data;
@@ -42,7 +42,7 @@ export const editaAddress = createAsyncThunk(
   async ({ userId, addressId, formData }) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/address/update/${userId}/${addressId}`,
         formData
       );
 
@@ -58,7 +58,7 @@ export const deleteAddress = createAsyncThunk(
   async ({ userId, addressId }) => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/address/delete/${userId}/${addressId}`
       );
 
       return response.data;

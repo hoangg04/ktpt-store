@@ -34,6 +34,7 @@ function AdminOrderDetailsView({ orderDetails }) {
 				setFormData(initialFormData);
 				toast({
 					title: data?.payload?.message,
+					variant: "success",
 				});
 			}
 		});
@@ -132,6 +133,7 @@ function AdminOrderDetailsView({ orderDetails }) {
 						setFormData={setFormData}
 						buttonText={"Update Order Status"}
 						onSubmit={handleUpdateStatus}
+						className="select-process"
 					/>
 				</div>
 			</div>

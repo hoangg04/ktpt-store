@@ -20,17 +20,6 @@ const addProductReview = async (req, res) => {
       });
     }
 
-    const checkExistinfReview = await ProductReview.findOne({
-      productId,
-      userId,
-    });
-
-    if (checkExistinfReview) {
-      return res.status(400).json({
-        success: false,
-        message: "You already reviewed this product!",
-      });
-    }
 
     const newReview = new ProductReview({
       productId,

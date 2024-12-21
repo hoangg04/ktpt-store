@@ -11,7 +11,7 @@ export const addReview = createAsyncThunk(
   async (formdata) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/shop/review/add`,
+        `https://e50d-116-96-110-215.ngrok-free.app/api/shop/review/add`,
         formdata
       );
       return response.data;
@@ -25,7 +25,7 @@ export const getReviews = createAsyncThunk("/order/getReviews", async (id) => {
 
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/review/${id}`
+      `https://e50d-116-96-110-215.ngrok-free.app/api/shop/review/${id}`
     );
 
     return response.data;

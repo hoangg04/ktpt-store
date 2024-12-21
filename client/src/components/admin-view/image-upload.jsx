@@ -47,7 +47,7 @@ function ProductImageUpload({
     const data = new FormData();
     data.append("my_file", imageFile);
     const response = await axios.post(
-      "http://localhost:5000/api/admin/products/upload-image",
+      "https://e50d-116-96-110-215.ngrok-free.app/api/admin/products/upload-image",
       data
     );
 

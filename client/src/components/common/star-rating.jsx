@@ -1,12 +1,12 @@
 import { StarIcon } from "lucide-react";
 import { Button } from "../ui/button";
 
-function StarRatingComponent({ rating, handleRatingChange }) {
+function StarRatingComponent({ rating, handleRatingChange ,className}) {
 
   return [1, 2, 3, 4, 5].map((star) => (
     <Button
     key={star}
-      className={`p-2 rounded-full transition-colors ${
+      className={`p-2 star rounded-full transition-colors ${className} ${
         star <= rating
           ? "text-yellow-500 hover:bg-black"
           : "text-black hover:bg-primary hover:text-primary-foreground"
